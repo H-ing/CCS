@@ -36,6 +36,13 @@ struct StageThreeResultOfClassStrategy{
     5:list<i16> subjectList //对应的科目
     6:list<list<map<i16,i16>>>    adminclassTransformSolution //4*n 组数*班级数*{科目组合：人数}    将第一类的行政班拿出来组成第四组
 }
+struct StageFourResultOfClassStrategy{
+    1:map<i32,list<map<i32,set<i32>>>>   subjectTeachingclass    //{科目:(每科教学班数*{科目组合：<学生集>})} 按学科分类的教学班的科目组合学生集
+    2:list<map<i32,list<i32>>>  groupTeachingclassIndex //组*{科目：[教学班索引]} 每一组中每个科目的教学班的索引
+    3:list<list<list<list<map<i32,i32>>>>>    groupAdminclassIncludeTeachingIndex //1*组*行政班*[{科目:索引}]   每组中的每个行政班包含的教学班，如果教学班属于走班，则一行会有多个教学班索引
+    4:map<string,i32>   subjectDict //{科目名：科目的代码}}
+    5:map<i32,list<map<i32,string>>>    subjectTeachingclassTransform   //subjectTeachingclass中‘学生集’转成字符串
+}
 
 struct ClassStrategyRule{
     2:map<i16,i32> subjectTeacherNumber //科目组合对应的老师数量
@@ -50,6 +57,7 @@ struct  ClassStrategyModifyResult{
     5:StageOneResultOfClassStrategy StageOneResultOfClassStrategy   //第一阶段所要修改的结果.....
     6:StageTwoResultOfClassStrategy StageTwoResultOfClassStrategy
     7:StageThreeResultOfClassStrategy StageThreeResultOfClassStrategy
+    //8:StageFourResultOfClassStrategy StageFourResultOfClassStrategy
 }
 
 struct ResultOfClassStrategyCreateTask{
@@ -81,6 +89,7 @@ struct ResultOfClassStrategyGetTaskResult{
     5:StageOneResultOfClassStrategy StageOneResultOfClassStrategy
     6:StageTwoResultOfClassStrategy StageTwoResultOfClassStrategy
     7:StageThreeResultOfClassStrategy StageThreeResultOfClassStrategy
+    8:StageFourResultOfClassStrategy StageFourResultOfClassStrategy
 }
 struct ResultOfClassStrategyModifyTaskResult{
     1:i32   statusCode
