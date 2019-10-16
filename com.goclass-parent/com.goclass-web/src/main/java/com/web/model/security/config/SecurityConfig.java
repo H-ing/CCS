@@ -11,12 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -31,8 +26,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.stereotype.Component;
-
 import com.alibaba.fastjson.JSON;
 import com.goclass.result.CommonResult;
 import com.goclass.result.LoginResult;
@@ -74,7 +67,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/webjars/**").permitAll()
 				.antMatchers("/v2/api-docs").permitAll()
 				// swagger end
-				.antMatchers("/", "/login").permitAll()
+
+				.antMatchers("/login/example").permitAll()
 				.antMatchers(roleUrlConfig.getApiAdminUrl()).access(roleUrlConfig.getRoleAdmin())
 				.antMatchers(roleUrlConfig.getDruidUrl()).access(roleUrlConfig.getRoleDba())
 				.antMatchers(roleUrlConfig.getApiDbaUrl()).access(roleUrlConfig.getRoleDba())
@@ -156,7 +150,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				response.getWriter().write(JSON.toJSONString(result));
 			}
 		});
-		filter.setFilterProcessesUrl("/login/self");
+		filter.setFilterProcessesUrl("/login");
 
 		// 这句很关键，重用WebSecurityConfigurerAdapter配置的AuthenticationManager，不然要自己组装AuthenticationManager
 		filter.setAuthenticationManager(authenticationManagerBean());

@@ -69,7 +69,7 @@ public class SpringFoxConfig extends WebMvcConfigurationSupport {
                 "本api为后端rest api",
                 "1.0",
                 "TERMS OF SERVICE URL",
-                new Contact("PengDeHe","http://localhost:8080/swagger-ui.html#/","617420449@qq.com"),
+                new Contact("PengDeHe","http://lede.dalaomai.cn:5050/swagger-ui.html#/","617420449@qq.com"),
                 "LICENSE",
                 "LICENSE URL",
                 Collections.emptyList()

@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONArray;
 import com.goclass.mapper.TbTimerMapper;
 import com.goclass.pojo.TbTimer;
 import com.goclass.pojo.TimerSchedul;
@@ -38,7 +38,7 @@ public class TimerServiceImpl implements TimerService {
 			timerSchedul.setId(tbTimer.getId());
 			timerSchedul.setItemNum(tbTimer.getTimerNum());
 			timerSchedul.setName(tbTimer.getName());
-			List<TimerSchedulItem> scheduls = (List<TimerSchedulItem>) JSON.parseObject(tbTimer.getTimerSchedul());
+			List<TimerSchedulItem> scheduls = JSONArray.parseArray(tbTimer.getTimerSchedul(), TimerSchedulItem.class);
 			timerSchedul.setItems(scheduls);
 			
 			result.add(timerSchedul);
@@ -53,7 +53,7 @@ public class TimerServiceImpl implements TimerService {
 		timerSchedul.setId(tbTimer.getId());
 		timerSchedul.setItemNum(tbTimer.getTimerNum());
 		timerSchedul.setName(tbTimer.getName());
-		List<TimerSchedulItem> scheduls = (List<TimerSchedulItem>) JSON.parseObject(tbTimer.getTimerSchedul());
+		List<TimerSchedulItem> scheduls = JSONArray.parseArray(tbTimer.getTimerSchedul(), TimerSchedulItem.class);
 		timerSchedul.setItems(scheduls);
 		return timerSchedul;
 	}

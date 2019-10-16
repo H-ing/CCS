@@ -45,12 +45,12 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter{
 			throws ServletException, IOException {
 		//获取前端传过来的token
 		String token = request.getHeader("token");
-		logger.info("token: " + token);
+//		logger.info("token: " + token);
 		//判断token是否存在
 		if (token != null) {
 			//验证token是否可解析
 			Claims claims = JwtHelper.verifyJwt(token);
-			logger.info(claims);
+//			logger.info(claims);
 			if (claims != null) {
 				//检查缓存中是否存在登录信息
 				this.init();

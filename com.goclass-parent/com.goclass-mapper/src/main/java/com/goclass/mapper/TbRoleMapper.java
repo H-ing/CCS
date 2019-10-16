@@ -1,9 +1,10 @@
 package com.goclass.mapper;
 
-import com.goclass.pojo.TbRole;
-import com.goclass.pojo.TbRoleExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import com.goclass.pojo.TbRole;
+import com.goclass.pojo.TbRoleExample;
 
 public interface TbRoleMapper {
     int countByExample(TbRoleExample example);

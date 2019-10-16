@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.goclass.pojo.TbTimer;
 import com.goclass.pojo.TimerSchedul;
-import com.goclass.pojo.TimerSchedulItem;
 import com.web.model.business.timer.service.TimerService;
 
 import io.swagger.annotations.Api;
@@ -31,8 +30,8 @@ public class TimerController {
 	
 	@PostMapping("/timer/schedul")
 	@ApiOperation("添加一个上课时间时段表")
-	public void add(@RequestBody @ApiParam(value = "上课时间时段表实体", required = true) TimerSchedul timerSchedul) {
-		timerService.add(timerSchedul);
+	public void add(@RequestBody @ApiParam(value = "上课时间时段表实体", required = true) TimerSchedul timer) {
+		timerService.add(timer);
 	}
 
 	@GetMapping("/timer/scheduls")

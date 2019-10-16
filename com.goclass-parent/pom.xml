@@ -23,6 +23,27 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+		
+		<!-- 打包部署 -->
+		<!-- <dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-web</artifactId>
+		    移除嵌入式tomcat插件
+		    <exclusions>
+			        <exclusion>
+			            <groupId>org.springframework.boot</groupId>
+			            <artifactId>spring-boot-starter-tomcat</artifactId>
+			        </exclusion>
+			    </exclusions>
+		</dependency> -->
+		
+	<!-- <dependency>
+	    <groupId>org.springframework.boot</groupId>
+	    <artifactId>spring-boot-starter-tomcat</artifactId>
+	    <scope>provided</scope>
+	</dependency> -->
+		<!-- 打包部署end -->
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -33,13 +54,6 @@
             <artifactId>spring-boot-devtools</artifactId>
         </dependency>
         
-		<!-- spring-security -->
-		<dependency>
-	    	<groupId>org.springframework.boot</groupId>
-	    	<artifactId>spring-boot-starter-security</artifactId>
-	    	<version>2.1.0.RELEASE</version>
-		</dependency>
-		
 		<!-- fastjson-->
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -74,14 +88,6 @@
 		
 	</dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
 	<modules>
 		<module>com.goclass-web</module>
 		<module>com.goclass-pojo</module>

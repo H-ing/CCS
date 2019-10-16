@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Implementation-Title: com.goclass-web
 Implementation-Version: 0.0.1-SNAPSHOT
-Built-By: 科健
+Built-By: Administrator
 Implementation-Vendor-Id: com.goclass-web
-Build-Jdk: 1.8.0_201
+Build-Jdk: 1.8.0_211
 Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
  ot-starter-parent/com.goclass-parent/com.goclass-web
 Created-By: Maven Integration for Eclipse

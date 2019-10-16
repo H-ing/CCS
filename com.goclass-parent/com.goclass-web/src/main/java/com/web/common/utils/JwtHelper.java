@@ -1,14 +1,12 @@
 package com.web.common.utils;
 
+import java.util.Base64;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.apache.tomcat.util.codec.binary.Base64;
-import org.springframework.beans.factory.annotation.Value;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
@@ -96,7 +94,7 @@ public class JwtHelper {
      */
     public static SecretKey generalKey() {
         String stringKey = JWT_SECRET;
-        byte[] encodedKey = Base64.decodeBase64(stringKey);
+        byte[] encodedKey = Base64.getDecoder().decode(stringKey);
         SecretKey key = new SecretKeySpec(encodedKey, 0, encodedKey.length, "AES");
         return key;
     }
