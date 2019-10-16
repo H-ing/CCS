@@ -3,12 +3,11 @@ package com.web.model.business.cg.bean.create;
 import java.util.List;
 
 public class CreateTaskBean {
-	private String taskName;
+	private int taskName;
 	private String grade;
 	private int[] subjectTeacherNumber;
 	private int[] sectionStudentNumber;
 	private List<Integer> maxAndMinClassStudentNumber;
-//	private int minClassStudentNumber;
 	private int runingTime=50;
 	
 	public int getRuningTime() {
@@ -17,10 +16,10 @@ public class CreateTaskBean {
 	public void setRuningTime(int runingTime) {
 		this.runingTime = runingTime;
 	}
-	public String getTaskName() {
+	public int getTaskName() {
 		return taskName;
 	}
-	public void setTaskName(String taskName) {
+	public void setTaskName(int taskName) {
 		this.taskName = taskName;
 	}
 	public String getGrade() {
