@@ -1,19 +1,11 @@
 package com.web.model.business.cg.controller;
 
-import static org.hamcrest.CoreMatchers.nullValue;
-
-import java.util.List;
-import java.util.Map;
-
-import javax.tools.Tool;
-
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alibaba.fastjson.JSONObject;
 import com.web.model.business.cg.bean.create.CreateTaskBean;
 import com.web.model.business.cg.tool.transform.CreateTaskTransform;
 import com.web.model.rpc.client.container.ResultOfClassStrategyCreateTask;
@@ -40,7 +32,7 @@ public class CgController {
 	
 	//创建分班任务
     @CrossOrigin
-	@RequestMapping("/class/grouping/createtask")
+	@RequestMapping("/api/admin/class/grouping/createtask")
 	public ResultOfClassStrategyCreateTask createTask(
 			@RequestBody CreateTaskBean createTaskData) {
 		CreateTaskTransform tools = new CreateTaskTransform();
@@ -67,7 +59,7 @@ public class CgController {
 	
 	//运行分班任务
     @CrossOrigin
-	@RequestMapping("/class/grouping/runtask")
+	@RequestMapping("/api/admin/class/grouping/runtask")
 	public ResultOfClassStrategyRunTask runTask(
 			@RequestParam(value = "taskId") int taskId,
 			@RequestParam(value = "stage") int stage){
@@ -85,7 +77,7 @@ public class CgController {
 	
 	//获取现有任务及其运行情况
     @CrossOrigin
-	@RequestMapping("/class/grouping/taskstatus")
+	@RequestMapping("/api/admin/class/grouping/taskstatus")
 	public ResultOfClassStrategyGetTasksStatus getTasksStatusForClassStrategy() {
     	ResultOfClassStrategyGetTasksStatus returnMessage = new ResultOfClassStrategyGetTasksStatus();
     	try {
@@ -101,7 +93,7 @@ public class CgController {
 	
 	//获取任务结果
     @CrossOrigin
-	@RequestMapping("/class/grouping/result")
+	@RequestMapping("/api/admin/class/grouping/result")
 	public ResultOfClassStrategyGetTaskResult getTaskResultForClassStrategy(
 			@RequestParam(value = "taskId") int taskId,
 			@RequestParam(value = "stage") int stage
@@ -113,7 +105,7 @@ public class CgController {
 	
 	//获取分班任务的现存规则
     @CrossOrigin
-	@RequestMapping("/class/grouping/rule")
+	@RequestMapping("/api/admin/class/grouping/rule")
 	public ResultOfGetClassStrategyRule getClassStrategyRule(
 			@RequestParam(value = "taskId") int taskId) {
 //    	ResultOfGetClassStrategyRule returnMessage = new ResultOfGetClassStrategyRule();
@@ -133,7 +125,7 @@ public class CgController {
 	
 	//删除分班任务
     @CrossOrigin
-	@RequestMapping("/class/grouping/delete")
+	@RequestMapping("/api/admin/class/grouping/delete")
 	public ResultOfClassStrategyDelTask delTaskForClassStrategy(
 			@RequestParam(value = "taskId") int taskId
 			) {
