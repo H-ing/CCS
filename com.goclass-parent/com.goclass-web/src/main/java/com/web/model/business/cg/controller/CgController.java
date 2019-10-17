@@ -3,6 +3,7 @@ package com.web.model.business.cg.controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,8 +32,8 @@ public class CgController {
 	CallingTool globalCallingTool = new CallingTool();
 	
 	//创建分班任务
-    @CrossOrigin
-	@RequestMapping("/api/admin/class/grouping/createtask")
+    @CrossOrigin(origins = "http://lede.dalaomai.cn:5050")
+	@RequestMapping(value = "/api/admin/class/grouping/createtask" , method = RequestMethod.POST)
 	public ResultOfClassStrategyCreateTask createTask(
 			@RequestBody CreateTaskBean createTaskData) {
 		CreateTaskTransform tools = new CreateTaskTransform();
@@ -58,8 +59,8 @@ public class CgController {
 	
 	
 	//运行分班任务
-    @CrossOrigin
-	@RequestMapping("/api/admin/class/grouping/runtask")
+    @CrossOrigin(origins = "http://lede.dalaomai.cn:5050")
+	@RequestMapping(value = "/api/admin/class/grouping/runtask" , method = RequestMethod.POST)
 	public ResultOfClassStrategyRunTask runTask(
 			@RequestParam(value = "taskId") int taskId,
 			@RequestParam(value = "stage") int stage){
@@ -76,8 +77,8 @@ public class CgController {
 	
 	
 	//获取现有任务及其运行情况
-    @CrossOrigin
-	@RequestMapping("/api/admin/class/grouping/taskstatus")
+    @CrossOrigin(origins = "http://lede.dalaomai.cn:5050")
+	@RequestMapping(value = "/api/admin/class/grouping/taskstatus" , method = RequestMethod.GET)
 	public ResultOfClassStrategyGetTasksStatus getTasksStatusForClassStrategy() {
     	ResultOfClassStrategyGetTasksStatus returnMessage = new ResultOfClassStrategyGetTasksStatus();
     	try {
@@ -92,8 +93,8 @@ public class CgController {
 	
 	
 	//获取任务结果
-    @CrossOrigin
-	@RequestMapping("/api/admin/class/grouping/result")
+    @CrossOrigin(origins = "http://lede.dalaomai.cn:5050")
+	@RequestMapping(value = "/api/admin/class/grouping/result" , method = RequestMethod.GET)
 	public ResultOfClassStrategyGetTaskResult getTaskResultForClassStrategy(
 			@RequestParam(value = "taskId") int taskId,
 			@RequestParam(value = "stage") int stage
@@ -104,8 +105,8 @@ public class CgController {
 	
 	
 	//获取分班任务的现存规则
-    @CrossOrigin
-	@RequestMapping("/api/admin/class/grouping/rule")
+    @CrossOrigin(origins = "http://lede.dalaomai.cn:5050")
+	@RequestMapping(value = "/api/admin/class/grouping/rule" , method = RequestMethod.GET)
 	public ResultOfGetClassStrategyRule getClassStrategyRule(
 			@RequestParam(value = "taskId") int taskId) {
 //    	ResultOfGetClassStrategyRule returnMessage = new ResultOfGetClassStrategyRule();
@@ -124,8 +125,8 @@ public class CgController {
 	
 	
 	//删除分班任务
-    @CrossOrigin
-	@RequestMapping("/api/admin/class/grouping/delete")
+    @CrossOrigin(origins = "http://lede.dalaomai.cn:5050")
+	@RequestMapping(value = "/api/admin/class/grouping/delete" , method = RequestMethod.DELETE)
 	public ResultOfClassStrategyDelTask delTaskForClassStrategy(
 			@RequestParam(value = "taskId") int taskId
 			) {
