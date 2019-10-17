@@ -35,6 +35,7 @@ struct StageThreeResultOfClassStrategy{
     4:list<list<i16>>   walkingClassNumber  //4*6   组数*科目数*（班级数）  
     5:list<i16> subjectList //对应的科目
     6:list<list<map<i16,i16>>>    adminclassTransformSolution //4*n 组数*班级数*{科目组合：人数}    将第一类的行政班拿出来组成第四组
+    7:list<list<map<i16,set<i16>>>> adminclassStudentSet    //分配了具体的学生
 }
 struct StageFourResultOfClassStrategy{
     1:map<i32,list<map<i32,set<i32>>>>   subjectTeachingclass    //{科目:(每科教学班数*{科目组合：<学生集>})} 按学科分类的教学班的科目组合学生集
