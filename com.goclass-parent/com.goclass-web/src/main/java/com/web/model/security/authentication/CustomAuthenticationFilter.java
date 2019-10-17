@@ -1,6 +1,8 @@
 package com.web.model.security.authentication;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -18,12 +20,13 @@ import java.io.InputStream;
  *
  */
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-    @Override
+    @SuppressWarnings("finally")
+	@Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        //attempt Authentication when Content-Type is json
-    	if(request.getContentType().equals(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                ||request.getContentType().equals(MediaType.APPLICATION_JSON_VALUE)){
-            //use jackson to deserialize json
+        //当 请求的Content-Type为json进行身份认证
+    	if(request.getContentType() != null && (request.getContentType().equals(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                ||request.getContentType().equals(MediaType.APPLICATION_JSON_VALUE))){
+            //使用jackson反序列化json
             ObjectMapper mapper = new ObjectMapper();
             UsernamePasswordAuthenticationToken authRequest = null;
             try (InputStream is = request.getInputStream()){
@@ -38,10 +41,11 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 setDetails(request, authRequest);
                 return this.getAuthenticationManager().authenticate(authRequest);
             }
-        }
-
-        //transmit it to UsernamePasswordAuthenticationFilter
-        else {
+        }else if (request.getContentType() == null) {
+        	//处理content-type不是application/json的情况
+			throw new AuthenticationCredentialsNotFoundException("content-type must be application/json");
+		}else {
+        	//交由UsernamePasswordAuthenticationFilter处理
             return super.attemptAuthentication(request, response);
         }
     }
