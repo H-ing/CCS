@@ -1,9 +1,0 @@
-#api权限配置
-role-url:
-  role.user: hasRole('ROLE_USER')
-  role.admin: hasRole('ROLE_ADMIN')
-  role.dba: hasRole('ROLE_DBA')
-  druid.url: /druid/**
-  api.admin.url: /api/admin/**
-  api.user.url: /api/user/**
-  api.dba.url: /**
