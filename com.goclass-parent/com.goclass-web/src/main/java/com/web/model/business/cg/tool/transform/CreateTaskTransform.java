@@ -10,6 +10,13 @@ public class CreateTaskTransform {
 	//物化生 物化地 物化政 物生地 物生政 物地政 历化生 历化地 历化政 历生地 历生政 历地政
 	Short[] sectionStudentNumberTransform = {1+4+8,1+4+16,1+4+32,1+8+16,1+8+32,1+16+32,
 			2+4+8,2+4+16,2+4+32,2+8+16,2+8+32,2+16+32};
+	
+	public Short[] getSubjectCodeList() {
+		return subjectCodeList;
+	}
+	public Short[] getSectionStudentNumberTransform() {
+		return sectionStudentNumberTransform;
+	}
 	//对科目进行编码
 	public Map<Short, Integer> subjectTeacherNumberTransform(int[] teacherNumberList) {
 		int i ;

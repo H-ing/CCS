@@ -1,5 +1,13 @@
 package com.web.model.business.cg.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.web.model.business.cg.bean.create.CreateTaskBean;
 import com.web.model.business.cg.bean.tserver.ServerMessageBean;
+import com.web.model.business.cg.datasourcce.DataSourceConnection;
+import com.web.model.business.cg.mapper.PopulationMapper;
 import com.web.model.business.cg.tool.transform.CreateTaskTransform;
 import com.web.model.rpc.client.container.ResultOfClassStrategyCreateTask;
 import com.web.model.rpc.client.container.ResultOfClassStrategyGetTasksStatus;
@@ -32,8 +42,36 @@ import com.web.model.rpc.server.source.ResultOfClassStrategyGetTaskResult;
 public class CgController {
 	CallingTool globalCallingTool = new CallingTool();
 	
+	//获取科目教师人数，各组合学生人数
+	@RequestMapping(value = "/class/grouping/data",method = RequestMethod.GET)
+	public Map<Short, String> searchNumberOfTeacherOrStudent(
+			@RequestParam(value = "object") String object) {
+		Map<Short, String> number = new HashMap<>();
+		number.put((short) 1, "人数");
+		CreateTaskTransform transformTool = new CreateTaskTransform();
+		SqlSession sqlSession = new DataSourceConnection().getSqlSession();
+		PopulationMapper population = sqlSession.getMapper(PopulationMapper.class);
+		if (object.equals("teacher")){
+			Short[] subjectList = transformTool.getSubjectCodeList();
+			for(Short temp:subjectList) {
+				number.put(temp,population.selectNumberOfTeacherBySubjectId(temp)+"");
+			}
+//			number = population.selectNumberOfTeacherBySubjectId(subjectCode);
+		}else if (object.equals("student")){
+			Short[] sectionStudentNumberTransform= transformTool.getSectionStudentNumberTransform();
+			for(Short temp:sectionStudentNumberTransform) {
+				number.put(temp,population.selectNumberOfStudentByCombinationId(temp)+"");
+			}
+//			number = population.selectNumberOfStudentByCombinationId(subjectCode);
+		}else {
+//			number = ;
+			return null;
+		}
+		return number;
+	}
+	
 	//创建分班任务
-	@RequestMapping(value = "/api/admin/class/grouping/createtask" , method = RequestMethod.POST)
+	@RequestMapping(value = "/class/grouping/createtask" , method = RequestMethod.POST)
 	public ResultOfClassStrategyCreateTask createTask(
 			@RequestBody CreateTaskBean createTaskData) {
 		CreateTaskTransform tools = new CreateTaskTransform();
@@ -59,7 +97,7 @@ public class CgController {
 	
 	
 	//运行分班任务
-	@RequestMapping(value = "/api/admin/class/grouping/runtask" , method = RequestMethod.POST)
+	@RequestMapping(value = "/class/grouping/runtask" , method = RequestMethod.POST)
 	public ResultOfClassStrategyRunTask runTask(
 			@RequestParam(value = "taskId") int taskId,
 			@RequestParam(value = "stage") int stage){
@@ -76,7 +114,7 @@ public class CgController {
 	
 	
 	//获取现有任务及其运行情况
-	@RequestMapping(value = "/api/admin/class/grouping/taskstatus" , method = RequestMethod.GET)
+	@RequestMapping(value = "/class/grouping/taskstatus" , method = RequestMethod.GET)
 	public ResultOfClassStrategyGetTasksStatus getTasksStatusForClassStrategy() {
     	ResultOfClassStrategyGetTasksStatus returnMessage = new ResultOfClassStrategyGetTasksStatus();
     	try {
@@ -91,7 +129,7 @@ public class CgController {
 	
 	
 	//获取任务结果
-	@RequestMapping(value = "/api/admin/class/grouping/result" , method = RequestMethod.GET)
+	@RequestMapping(value = "/class/grouping/result" , method = RequestMethod.GET)
 	public ResultOfClassStrategyGetTaskResult getTaskResultForClassStrategy(
 			@RequestParam(value = "taskId") int taskId,
 			@RequestParam(value = "stage") int stage
@@ -102,7 +140,7 @@ public class CgController {
 	
 	
 	//获取分班任务的现存规则
-	@RequestMapping(value = "/api/admin/class/grouping/rule" , method = RequestMethod.GET)
+	@RequestMapping(value = "/class/grouping/rule" , method = RequestMethod.GET)
 	public ResultOfGetClassStrategyRule getClassStrategyRule(
 			@RequestParam(value = "taskId") int taskId) {
 //    	ResultOfGetClassStrategyRule returnMessage = new ResultOfGetClassStrategyRule();
@@ -121,7 +159,7 @@ public class CgController {
 	
 	
 	//删除分班任务
-	@RequestMapping(value = "/api/admin/class/grouping/delete" , method = RequestMethod.DELETE)
+	@RequestMapping(value = "/class/grouping/delete" , method = RequestMethod.DELETE)
 	public ResultOfClassStrategyDelTask delTaskForClassStrategy(
 			@RequestParam(value = "taskId") int taskId
 			) {
