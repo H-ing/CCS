@@ -44,6 +44,15 @@ struct StageFourResultOfClassStrategy{
     4:map<string,i32>   subjectDict //{科目名：科目的代码}}
     5:map<i32,list<map<i32,string>>>    subjectTeachingclassTransform   //subjectTeachingclass中‘学生集’转成字符串
 }
+struct StageFiveResultOfClassStrategy{
+    1:map<string,i32> subjectDict  //{学科名称:学科代码}   包含了所有的学科
+    2:list<map<i32,list<i32>>> adminclassList  //行政班数*{科目组合代码:学生集}    每个行政班包含的科目组合学生集
+    3:list<map<i32,list<i32>>> teachingclassList   //教学班*{科目组合代码:学生集}    每个教学班包含的科目组合学生集
+    4:list<list<i32>>   mixteachingclassList   //混合教学班数*所包含的教学班序号   每个混合教学班包含的教学班，教学班序号即teachingclass_list对应的索引
+    5:list<map<i32,i32>>  teachingclassIndexList  //教学班数*{科目代码:编号}      每个教学班对应的科目以及编号，通过科目：编号可确定教学班
+    6:list<list<i32>>  adminclassMixteachingclassList //行政班数*所包含的混合教学班数     每个行政班所包含的教学班,行政班的索引对应adminclass_list的索引,混合教学班的索引对应mixteachingclass_list
+    7:list<list<i32>>   mixteachingclassAdminclassesList  //混合教学班数*所对应的行政班数     每个混合教学班所影响到的行政班
+}
 
 struct ClassStrategyRule{
     2:map<i16,i32> subjectTeacherNumber //科目组合对应的老师数量
@@ -91,6 +100,7 @@ struct ResultOfClassStrategyGetTaskResult{
     6:StageTwoResultOfClassStrategy StageTwoResultOfClassStrategy
     7:StageThreeResultOfClassStrategy StageThreeResultOfClassStrategy
     8:StageFourResultOfClassStrategy StageFourResultOfClassStrategy
+    9:StageFiveResultOfClassStrategy    StageFiveResultOfClassStrategy
 }
 struct ResultOfClassStrategyModifyTaskResult{
     1:i32   statusCode
