@@ -13,6 +13,8 @@ enum Subject{
 
 //statusCode 0:正常 -1：异常
 
+/////////分班
+
 struct StageOneResultOfClassStrategy{
     1:list<list<list<i32>>>   walkingclassCombinationSolution //2*3*2的数组 科目组合的结果
     2:list<list<list<i32>>>   walkingclassCombinationSelection    //2*3*2 对应的科目组合
@@ -112,9 +114,86 @@ struct ResultOfGetClassStrategyRule{
     3:ClassStrategyRule rule
 }
 
+
+//////////排课
+struct ClassScheduleRule{
+    1:StageFiveResultOfClassStrategy    StageFiveResultOfClassStrategy
+    2:map<i32,i16>  subjectSubjectcount     //{科目代码：接次数} 每个科目每周的节次
+    3:list<i16> onedaySession   //一天的节次 例子[0,1,2,3,4,5,6]    一天七节
+    4:list<map<i32,i16>> teacherList    //教师数*{科目代码：序号}   任课老师列表
+    5:list<i32> teachingclassTeacherList    //教学班数*任课老师索引 对应着各自的list：teachingclass_list、teacher_list.后面的索引自行对应
+    6:list<i32> classroomList   //教室集
+    7:list<i32> teachingclassClassroomList  //每个行政班对应的教室索引
+    8:list<list<i32>>   positiveClassSchedule   //一个星期总节数*n  固排课表    把需要固排的“混合教学班索引”放到对应的节次
+    9:list<list<i32>>   negativeClassSchedule   //一个星期总节数*n  禁排课表    把需要禁排的“混合教学班索引”放到对应的节次  不用上课的节次放入-1
+    10:list<list<i32>>  connectClass    //连排条目数*连排单元 连排单元：  [星期几（0开始）,混合教学班索引,连排数]
+
+    //调试时候设置为1，快速获得结果，平常用默认值即可
+    11:i32    populationSize=50
+    12:i32    maxPopulationSize=100
+}
+
+struct StageOneResultOfClassSchedule{
+
+    4:list<list<i32>>   daysMixteachingclassPool    //天数*n    每天所要上的混合教学班课
+    5:list<map<i32,i32>>  daysMixteachingclassSessionNumberList   //天数*{混合教学班:节次数}  每天每个混合教学班要上的节次数
+    6:list<map<i32,i32>>  daysTeacherSessionNumberList    //天数*{任课老师:节次数}  每天每位任课老师要上的节次数
+    7:list<map<i32,i32>>  daysAdminclassSessionNumberList //天数*{行政班:节次数}  每天每个行政班要上的节次数  用来验证结果的，每个行政班每天都要上满课
+}
+struct StageTwoResultOfClassSchedule{
+    1:list<list<i32>>   sessionClassSchedule  //每周总节次数*混合教学班   在每节中要上课的混合教学班
+    2:list<list<list<i32>>>   dayAdminclassClassSchedule  //天数*行政班数*混合教学班    每天，每个行政班，根据节次顺序要上的课。注意这里的混合教学班是有顺序的
+}
+
+struct ResultOfClassScheduleSimulateData{
+    1:i32 statusCode    //0-正常 -1-出错
+    2:string   message  //返回的消息
+    3:ClassScheduleRule ClassScheduleRule
+}
+
+struct ResultOfClassScheduleCreateTask{
+    1:i32 statusCode    //0-正常 -1-出错
+    2:i32 taskId    //任务id
+    3:string   message  //返回的消息
+}
+struct ResultOfClassScheduleDelTask{
+    1:i32 statusCode    //0-正常 -1-出错
+    2:string   message  //返回的消息
+}
+
+struct ResultOfClassScheduleRunTask{
+    1:i32 statusCode    //0-运行成功 -1-出错
+    2:string message    
+}
+
+struct ResultOfClassScheduleGetTasksStatus{
+    1:i32   statusCode
+    2:map<i32,i16>  tasksStatusMap  //{taskId:status}   每个任务对应的状态  0-完成  1-正在运行  -1-出现了错误
+    3:map<i32,i16>  tasksStageMap   //{taksId:stage}    每个任务目前的阶段
+    4:string message
+}
+
+struct ResultOfClassScheduleStopTask{
+    1:i32 statusCode    //0-运行成功 -1-出错
+    2:string message    
+}
+struct ResultOfClassScheduleGetTaskResult{
+    1:i32   statusCode
+    2:string    message
+    3:i32   taskId
+    4:i32   stage
+    5:i32   status
+    6:StageOneResultOfClassSchedule StageOneResultOfClassSchedule
+    7:StageTwoResultOfClassSchedule StageTwoResultOfClassSchedule
+}
+
+
+
 service ClassSchedulignService{
+    //测试
     bool ping()
 
+    /////////分班
     //创建分班任务
     ResultOfClassStrategyCreateTask createTaskForClassStrategy(1:ClassStrategyRule rule)
 
@@ -135,4 +214,27 @@ service ClassSchedulignService{
 
     //获取分班任务的现存规则
     ResultOfGetClassStrategyRule getClassStrategyRule(1:i32 taskId)
+
+
+    /////排课
+    //模拟数据，测试用的
+    ResultOfClassScheduleSimulateData   simulateDataForClassSchedule()
+
+    //创建排课任务
+    ResultOfClassScheduleCreateTask createTaskForClassSchedule(1:ClassScheduleRule rule)
+
+    //删除排课任务
+    ResultOfClassScheduleDelTask delTaskForClassSchedule(1:i32  taskId)
+
+    //运行排课任务  异步的形式
+    ResultOfClassScheduleRunTask runTaskForClassSchedule(1:i32 taskId,2:i32 stage)
+
+    //获取现有排课任务及其运行情况
+    ResultOfClassScheduleGetTasksStatus getTasksStatusForClassSchedule()
+
+    //停止排课任务
+    ResultOfClassScheduleStopTask stopTaskForClassSchedule(1:i32 taskId)
+
+    //获取任务结果
+    ResultOfClassScheduleGetTaskResult getTaskResultForClassSchedule(1:i32 taskId,2:i32 stage)
 }
