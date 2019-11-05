@@ -8,9 +8,9 @@
 			<dataSource type="POOLED">
 				<property name="driver" value="com.mysql.cj.jdbc.Driver"/>
 				<property name="url"
-					value="jdbc:mysql://127.0.0.1:5006/goclass?serverTimezone=UTC"/>
+					value="jdbc:mysql://127.0.0.1:3306/goclass?serverTimezone=UTC"/>
 				<property name="username" value="root"/>
-				<property name="password" value="root"/>
+				<property name="password" value=""/>
 			</dataSource>
 		</environment>
 	</environments>

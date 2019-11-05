@@ -9,8 +9,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
@@ -25,10 +24,8 @@ import com.goclass.result.CommonResult;
 import com.web.common.config.redis.RedisConstant;
 import com.web.common.utils.JwtHelper;
 import com.web.common.utils.Md5Util;
-import com.web.common.utils.jwt.JwtUtils;
-import com.web.common.utils.jwt.UserToken;
+
 import com.web.model.business.user.service.UserService;
-import com.web.model.security.authentication.SecurityUserInfo;
 
 @Service
 public class UserServiceImpl implements UserService{

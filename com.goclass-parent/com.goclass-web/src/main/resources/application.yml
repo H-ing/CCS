@@ -57,9 +57,7 @@ spring:
         # 登录名
         login-username: admin
         # 登录密码
-        login-password: 123456
-  #redis
-  redis:
-    host: 127.0.0.1
+        login-password: 123456  redis:    host: 127.0.0.1
+    port: 6379
     
         

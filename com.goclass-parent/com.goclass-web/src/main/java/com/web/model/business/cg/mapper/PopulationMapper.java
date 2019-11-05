@@ -6,4 +6,7 @@ import java.util.Map;
 public interface PopulationMapper {
 	int selectNumberOfStudentByCombinationId(int id);
 	int selectNumberOfTeacherBySubjectId(int id);
+	List<Map> selectStudentBySection(int selectionIds);
+	List<Map> selectAllStudent();
+	Map selectStudentById(Object object);
 }

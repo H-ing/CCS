@@ -12,4 +12,18 @@ EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 	 <select id="selectNumberOfTeacherBySubjectId" resultType="int">
 	 select count(subject_id) from tb_teacher where 
 	 subject_id = #{id}</select>
+	 <select id="selectStudentBySection" resultType="map">
+	 select tb_student.student_id , tb_student.student_name ,  
+	 tb_selection_detailed.course_combination_id 
+	 from tb_student left join tb_selection_detailed on tb_student.student_id
+	 = tb_selection_detailed.student_id where 
+	 tb_selection_detailed.course_combination_id = #{selectionId};
+	 </select>
+	 <select id="selectAllStudent" resultType="map">
+	 select * from tb_selection_detailed</select>
+	 <select id="selectStudentById" resultType="map">
+	 select tb_student.student_id , tb_student.student_name ,tb_selection_detailed.course_combination_id 
+	  from tb_student left join tb_selection_detailed on tb_student.student_id = tb_selection_detailed.student_id
+	   where tb_student.student_id=#{id}</select>
+	 
 </mapper>
