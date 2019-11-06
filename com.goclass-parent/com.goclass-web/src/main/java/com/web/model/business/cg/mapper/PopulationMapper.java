@@ -9,4 +9,5 @@ public interface PopulationMapper {
 	List<Map> selectStudentBySection(int selectionIds);
 	List<Map> selectAllStudent();
 	Map selectStudentById(Object object);
+	List<Map> selectTeacherBySubject(String subjectName);
 }

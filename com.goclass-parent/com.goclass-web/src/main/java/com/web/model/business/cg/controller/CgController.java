@@ -177,7 +177,14 @@ public class CgController {
 			) {
 		ResultOfClassStrategyGetTaskResult result = globalCallingTool.getTaskResultForClassStrategy(
 				taskId, stage);
-		Map<String, String> subjectMapTool = new CreateTaskTransform().getSubjectSelectionStringMap();
+		Map<String, String> subjectMapTool = CreateTaskTransform.getSubjectSelectionStringMap();
+		if(result==null) {
+			Map<String, String> returnMessage = new HashMap<String, String>() {{
+				put("message","远程调用出现错误");
+			}};
+			return returnMessage;
+		}
+//		System.out.println("返回结果"+result.message);
 		if (result.getMessage().equals("ok")) {
 			// 第一阶段
 			if (stage==1) {
@@ -363,7 +370,7 @@ public class CgController {
 //			 Map<Short, Short> numberOfEachSubjectInClass = new HashMap<>();
 			 for(;groupNumber<adminclassSolution.size();groupNumber++) {
 				 for(;type<adminclassSolution.get(groupNumber).size();type++) {
-					 System.out.println(adminclassSolution.get(groupNumber).get(type));
+//					 System.out.println(adminclassSolution.get(groupNumber).get(type));
 					 for(Map<Short, Short> numberOfEachSubjectInClass:adminclassSolution.get(groupNumber).get(type)) {
 						 studentNumberMap.put("group", type+"-"+counter);
 						 for(Short code:subjectCodeList) {
@@ -439,47 +446,62 @@ public class CgController {
 			 StageFourResultOfClassStrategy stageFourResultOfClassStrategy = 
 					 result.getStageFourResultOfClassStrategy();
 			 // 数据获取
+			 
+			 //       {科目:(每科教学班数*{科目组合：<学生集>})}
 			 Map<Integer, List<Map<Integer, Set<Integer>>>> subjectTeachingclass = 
 					 stageFourResultOfClassStrategy.getSubjectTeachingclass();
+			 
+			 //      组*{科目：[教学班索引]} 每一组中每个科目的教学班的索引
 			 List<Map<Integer, List<Integer>>> groupTeachingclassIndex = 
 					 stageFourResultOfClassStrategy.getGroupTeachingclassIndex();
 			 //处理数据
 			 List<Map> fourStageScoreData = new ArrayList<>();
+			 //每组的数据
 			 Map groupClassDataMap = new HashMap<>();
+			 //该组下的教学班
 			 List<Map> group = new ArrayList<>();
 			 Map<String, String> subjectStudentMap = new HashMap<>();
-			 
-			 Map<String, String> subjectStringMap = new CreateTaskTransform().getSubjectSelectionStringMap();
-			 Short[] subjectSet = new CreateTaskTransform().getSectionStudentNumberTransform();
+			 //   {科目编号 ： 对应的中文}
+			 Map<String, String> subjectStringMap = CreateTaskTransform.getSubjectSelectionStringMap();
+			 Short[] subjectSet = CreateTaskTransform.getSectionStudentNumberTransform();
 			 int groupNumber = 0;
+			 //   		第几组的数据
 			 for(;groupNumber<groupTeachingclassIndex.size();groupNumber++) {
 				 groupClassDataMap.put("title", "组"+(groupNumber+1));
 				 groupClassDataMap.put("name", groupNumber+1);
+				 // 	 		科目编号：[教学班索引]
 				 for(Map.Entry<Integer, List<Integer>> eachGroupSubject:
 					 groupTeachingclassIndex.get(groupNumber).entrySet()) {
-					 
+					 		// (教学班索引)
 					 List<Integer> teachingClass = eachGroupSubject.getValue();
 					 
-					 subjectStudentMap.put("group", subjectStringMap.get(""+eachGroupSubject.getKey()));
+					 
+					 //    获取该科目的教学班
 					 List<Map<Integer, Set<Integer>>> teachingClassList = 
 							 subjectTeachingclass.get(eachGroupSubject.getKey());
-					 
+					 //  i : 教学班索引
 					 for (int i = 0; i < teachingClass.size(); i++) {
+						 subjectStudentMap.put("group", subjectStringMap.get(""+eachGroupSubject.getKey())+"-"
+								 +teachingClass.get(i));
 						 for (int j = 0; j < subjectSet.length; j++) {
-							if(!teachingClassList.get(teachingClass.get(i)).containsKey(subjectSet[j])) {
-								subjectStudentMap.put("c"+subjectSet[j], ""+0);
-							}
+//							if(!teachingClassList.get(teachingClass.get(i)).containsKey(subjectSet[j])) {
+							subjectStudentMap.put("c"+subjectSet[j], ""+0);
+//							}
 						}
-						 for(Map.Entry<Integer, Set<Integer>> studentSet :
-							 teachingClassList.get(teachingClass.get(i)).entrySet()) {
-								 subjectStudentMap.put("c"+studentSet.getKey(), ""+studentSet.getValue().size());
-							 
+						 //   <科目组合  ： 学生合集>
+						 for(Map.Entry<Integer, Set<Integer>> eachSelectionStudent : subjectTeachingclass.get(eachGroupSubject.getKey()).get(i).entrySet()) {
+							 subjectStudentMap.put("c"+ eachSelectionStudent.getKey(), ""+eachSelectionStudent.getValue().size());
 						 }
+						 Map<String, String> tempMap = new HashMap<>();
+						 tempMap.putAll(subjectStudentMap);
+						 group.add(tempMap);
+						 subjectStudentMap.clear();
+//						 for(Map.Entry<Integer, Set<Integer>> studentSet :
+//							 teachingClassList.get(teachingClass.get(i)).entrySet()) {
+//								 subjectStudentMap.put("c"+studentSet.getKey(), ""+studentSet.getValue().size());
+//						 }
 					}
-					 Map<String, String> tempMap = new HashMap<>();
-					 tempMap.putAll(subjectStudentMap);
-					 group.add(tempMap);
-					 subjectStudentMap.clear();
+					 
 				 }
 				 List<Map> temList = new ArrayList<>();
 				 temList.addAll(group);
@@ -515,9 +537,9 @@ public class CgController {
 				 tempList.addAll(population.selectStudentBySection(sectionStudentNumberTransform[i]));
 				 studentSetForEachSelection.put(Integer.valueOf(sectionStudentNumberTransform[i]), tempList);
 			 }
-			 for(Map.Entry<Integer, List<Map>> tempEntry:studentSetForEachSelection.entrySet()) {
-				 System.out.println("科目"+ tempEntry.getKey() +"有"+tempEntry.getValue().size()+"人");
-			 }
+//			 for(Map.Entry<Integer, List<Map>> tempEntry:studentSetForEachSelection.entrySet()) {
+//				 System.out.println("科目"+ tempEntry.getKey() +"有"+tempEntry.getValue().size()+"人");
+//			 }
 			 sqlSession.close();
 			 //获取每个行政班 每种选课组合需要多少的学生
 			 		//[行政班数<科目组合代码: 学生人数>]
@@ -534,7 +556,7 @@ public class CgController {
 				 adminClass.add(cloneTempMap);
 				 adminClassDistribution.clear();
 			 }
-			 System.out.println(adminClass);
+//			 System.out.println(adminClass);
 			 //学生数据:   每个科目组合:{编号:学生数据}
 			 Map<String,Map<String, String>> studentDataMap = new HashMap<>();
 			 for (int i = 0; i < sectionStudentNumberTransform.length; i++) {
@@ -587,7 +609,7 @@ public class CgController {
 				 classDetail.clear();
 			 }
 //			 System.out.println("剩余学生"+studentSetForEachSelection);
-			 System.out.println("学生人数总和为:" + sumOfStudent);
+//			 System.out.println("学生人数总和为:" + sumOfStudent);
 			 //存储
 			 for(Map.Entry<String, Map<String, String>> eachSubjectSelection : studentDataMap.entrySet()) {
 				 //			<rpc结果索引，数据库学生信息id>
@@ -646,6 +668,20 @@ public class CgController {
 				subjectInfo.clear();
 				teachingClassStudentInfo.put("教学"+(teachingClassNumber+1)+"班",teachingClassInfoMap);
 			}
+			 //混合教学班数据填入
+			 //混合教学班数*所包含的教学班序号   每个混合教学班包含的教学班，教学班序号即teachingclass_list对应的索引
+			 List<List<Integer>> mixteachingclassList = stageFiveResultOfClassStrategy.getMixteachingclassList();
+			 //	{混合教学班名称：{字符串 学生信息/科目信息：对应的学生信息/科目信息}}
+			 Map<String, Map> mixTeachingClassInfo = new LinkedHashMap<>();
+			 for (int mixTeachingClassNumber = 0; mixTeachingClassNumber < mixteachingclassList.size(); mixTeachingClassNumber++) {
+				 Map teachingClassMap = new HashMap<>();
+				 for (int teachingClassNumber = 0; teachingClassNumber < mixteachingclassList.get(mixTeachingClassNumber).size(); teachingClassNumber++) {
+					 teachingClassMap.put("教学"+(teachingClassNumber+1)+"班", 
+							 teachingClassStudentInfo.get("教学"+(teachingClassNumber+1)+"班"));
+				}
+				 mixTeachingClassInfo.put("混合教学"+(mixTeachingClassNumber+1)+"班",teachingClassMap );
+			}
+			 System.out.println("混合教学班数量："+mixteachingclassList.size());
 			return teachingClassStudentInfo;
 		 }
 		}
