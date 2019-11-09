@@ -25,5 +25,8 @@ EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 	 select tb_student.student_id , tb_student.student_name ,tb_selection_detailed.course_combination_id 
 	  from tb_student left join tb_selection_detailed on tb_student.student_id = tb_selection_detailed.student_id
 	   where tb_student.student_id=#{id}</select>
+	 <select id="selectTeacherBySubject" resultType="map">
+	 select teacher_id,teacher_name,course_name from tb_teacher 
+	  where course_name=#{subjectName}</select>
 	 
 </mapper>

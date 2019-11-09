@@ -681,7 +681,7 @@ public class CgController {
 				}
 				 mixTeachingClassInfo.put("混合教学"+(mixTeachingClassNumber+1)+"班",teachingClassMap );
 			}
-			 System.out.println("混合教学班数量："+mixteachingclassList.size());
+			 System.out.println("混合教学班数量："+mixTeachingClassInfo.size());
 			return teachingClassStudentInfo;
 		 }
 		}
